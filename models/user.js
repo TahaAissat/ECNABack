@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const userSchema = mongoose.Schema({
     name : String,
     password : String,
-    entreprises : []
+    entreprises : {type:mongoose.Schema.ObjectId, ref:'entreprises'}
 })
 
 const User = mongoose.model('user', userSchema)
