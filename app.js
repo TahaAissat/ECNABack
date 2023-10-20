@@ -7,6 +7,9 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var interventionsRouter = require('./routes/interventions')
+var patientsRouter = require('./routes/patients')
+var vehiculesRouter = require('./routes/vehicules')
 
 var app = express();
 
@@ -21,5 +24,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/interventions',interventionsRouter)
+app.use('/patients', patientsRouter)
+app.use('/vehicules' , vehiculesRouter)
+
+
 
 module.exports = app;

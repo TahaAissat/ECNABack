@@ -3,8 +3,8 @@ const mongoose = require ('mongoose')
 const anomaliesSchema = mongoose.Schema ({
     manqueSS : Boolean,
     manqueMutuelle : Boolean,
-    manqueBR : Boolean,
-    manqueAP : Boolean,
+    manqueBT : Boolean,
+    manqueBS : Boolean,
     intervention : {type : mongoose.Schema.ObjectId, ref:'interventions'}
 })
 
