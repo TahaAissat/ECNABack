@@ -4,7 +4,9 @@ const Vehicule = require('../models/vehicule');
 const Entreprise = require('../models/entreprise')
 const {checkBody} = require('../modules/checkBody')
 
-router.post('/addVehicule' , (req,res) => {
+
+// Route création de véhicule et association à l'entreprise (testé)
+router.post('/add' , (req,res) => {
 // Verification des champs envoyés du front
     if(!checkBody(req.body,['plaque','type'])){
         res.json({result:false, error:'Empty or missing fields'})
@@ -34,7 +36,7 @@ router.post('/addVehicule' , (req,res) => {
     })
 })
 
-// Route pour renvoyer la liste de tous les véhicules associés au SIREN présent dans le reducer
+// Route pour renvoyer la liste de tous les véhicules associés au SIREN présent dans le reducer (testé)
 router.get('/:SIREN', (req,res) => {
     Vehicule.find({SIREN:req.params.SIREN})
     .then(data => {
