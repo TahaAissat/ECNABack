@@ -79,7 +79,7 @@ Entreprise.findOne({SIREN:req.body.SIREN})
 // On met à jour le document user dont le token correspond au token renvoyé du front(présent dans le reducer)   
         User.updateOne({token:req.body.token},{$push:{entreprises:data._id}})
         .then(() => {
-            res.json({result:true, message : 'Entreprise created & added to user document'})
+            res.json({result:true, SIREN : req.body.SIREN, message : 'Entreprise created & added to user document'})
         })
     })
     } else {
