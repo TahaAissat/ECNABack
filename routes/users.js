@@ -44,17 +44,18 @@ User.findOne({name:req.body.username})
 router.post('/signin', (req,res) => {
 // Verification des champs renvoyés du front avec le module checkBody
     if(!checkBody(req.body,['username' , 'password'])){
-        res.json({result:false , error: 'Missing or empty fields'})
+        res.json({result:false , error: 'Un ou plusieurs champs sont vides'})
         return
     }
 User.findOne({username : req.body.username})
+.populate('entreprises')
 .then(data => {
 // Si le nom ainsi que le mot de passe correspondent, on renvoit true et le token
     if(data && bcrypt.compareSync(req.body.password,data.password)) {
-        res.json({result:true , token : data.token})
+        res.json({result:true , token : data.token, SIREN : data.entreprises[0].SIREN})
     } else {
 // Si non, renvoyer false et message d'erreur
-        res.json({result:false,error:'User not found'})
+        res.json({result:false,error:'Mauvais identifiant ou mot de passe'})
     }
 })
 })
