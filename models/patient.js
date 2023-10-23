@@ -7,8 +7,8 @@ const patientsSchema = mongoose.Schema ({
     phone : String,
     SSnumber : String,
     mutuelle : String,
-    valide : Boolean,
-    interventions : {type : mongoose.Schema.ObjectId, ref:'interventions'}
+    valide : String,
+    interventions : [{type : mongoose.Schema.ObjectId, ref:'interventions'}]
 })
 
 const Patient = mongoose.model('patients',patientsSchema)
