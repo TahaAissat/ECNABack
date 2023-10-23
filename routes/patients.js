@@ -4,11 +4,11 @@ const Patient = require('../models/patient')
 const {checkBody} = require('../modules/checkBody')
 
 router.post('/verify', (req,res) => {
-    if(!checkBody(req.body,['numeroSS'])){
+    if(!checkBody(req.body,['SSnumber'])){
         res.json({result:false,error:'Champ vide ou manquant'})
         return
     }
-    Patient.findOne({numeroSS:req.body.numeroSS})
+    Patient.findOne({SSnumber:req.body.SSnumber})
     .then(data => {
         if(data){
             res.json({result:true,patient:data})
