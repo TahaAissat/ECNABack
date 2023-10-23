@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 const entrepriseSchema = mongoose.Schema({
     name : String,
-    SIREN : Number,
+    SIREN : String,
     vehicules : [{type : mongoose.Schema.ObjectId, ref:'vehicules'}]
 })
 
