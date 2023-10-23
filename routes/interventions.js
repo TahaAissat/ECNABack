@@ -5,6 +5,8 @@ const Vehicule = require('../models/vehicule')
 const Patient = require('../models/patient')
 const {checkBody} = require('../modules/checkBody')
 
+
+// Route de création d'une intervention (testé)
 router.post('/add', (req,res) => {
 // Verification des champs départ et arrivée
     if(!checkBody(req.body,['departure','arrival'])){
@@ -23,29 +25,43 @@ router.post('/add', (req,res) => {
             mutuelle : req.body.mutuelle
         })
     newPatient.save().then(patientData => {
+        Vehicule.findOne({plaque:req.body.plaque})
+        .then(vehiculeData => {
             const newIntervention = new Intervention({
                 patient : patientData._id,
+                vehicule:vehiculeData._id,
                 departure : req.body.departure,
                 arrival : req.body.arrival,
                 date : new Date()
             })
-        newIntervention.save().then(() => {
-            res.json({result:true,message:'Intervention and patient have been added to database'})
+        newIntervention.save().then((interventionData) => {
+            Vehicule.updateOne({plaque:req.body.plaque},{$push:{interventions:interventionData._id}})
+            .then(() => {
+                res.json({result:true,message:'Intervention and patient have been added to database'})
+            })   
+        })
         })
     })
 // Si le patient est présent dans la BDD, on recupère l'id et on l'associe directement à l'intervention
     }else {
         Patient.findOne({numeroSS:req.body.numeroSS})
         .then(patientData => {
+            Vehicule.findOne({plaque:req.body.plaque})
+            .then(vehiculeData => {
                 const newIntervention = new Intervention({
                     patient : patientData._id,
+                    vehicule:vehiculeData._id,
                     departure : req.body.departure,
                     arrival : req.body.arrival,
                     date : new Date()
                 })
-            newIntervention.save().then(() => {
-                res.json({result:true,message : 'Intervention added to database'})
+            newIntervention.save().then((interventionData) => {
+                Vehicule.updateOne({plaque:req.body.plaque},{$push:{interventions:interventionData._id}})
+                .then(() => {
+                    res.json({result:true,message : 'Intervention added to database'})
+                })
             })  
+            })
         })
     }
 })

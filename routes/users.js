@@ -7,10 +7,10 @@ const uid2 = require('uid2')
 const bcrypt = require('bcrypt')
 
 
-// Route SignUp 
+// Route SignUp (testé)
 router.post('/signup', (req,res) => {
 // Verification des champs renvoyés du front avec le module checkBody
-    if(!checkBody(req.body,['username' , 'password'])){
+    if(!checkBody(req.body,['username' , 'password','email'])){
         res.json({result:false , error: 'Missing or empty fields'})
         return
     }
@@ -24,6 +24,7 @@ User.findOne({name:req.body.username})
     if(data === null){
         const newUser = new User({
             username : req.body.username,
+            email : req.body.email,
             password : hash,
             token : token,
             entreprises : []
@@ -39,7 +40,7 @@ User.findOne({name:req.body.username})
 })
 })
 
-// Route signIn 
+// Route signIn (testé)
 router.post('/signin', (req,res) => {
 // Verification des champs renvoyés du front avec le module checkBody
     if(!checkBody(req.body,['username' , 'password'])){
@@ -58,7 +59,7 @@ User.findOne({username : req.body.username})
 })
 })
 
-// Création du document entreprise lorsqu'un user sign up
+// Création du document entreprise lorsqu'un user sign up (testé)
 router.post('/addEntreprise', (req,res) => {
 // Verification des champs
     if(!checkBody(req.body,['name','SIREN'])){
