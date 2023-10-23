@@ -4,8 +4,8 @@ const patientsSchema = mongoose.Schema ({
     lastName : String,
     firstName:String,
     adress : String,
-    phone : Number,
-    SSnumber : Number,
+    phone : String,
+    SSnumber : String,
     mutuelle : String,
     valide : Boolean,
     interventions : {type : mongoose.Schema.ObjectId, ref:'interventions'}
