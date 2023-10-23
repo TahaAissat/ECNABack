@@ -31,8 +31,11 @@ router.post('/add', (req,res) => {
                 arrival : req.body.arrival,
                 date : new Date()
             })
-        newIntervention.save().then(() => {
-            res.json({result:true,message:'Intervention and patient have been added to database'})
+        newIntervention.save().then((interventionData) => {
+            Patient.updateOne({SSnumber:req.body.SSnumber},{$push:{interventions:interventionData._id}})
+            .then(() => {
+                res.json({result:true,message:'Intervention and patient have been added to database'})
+            })
         })
     })
 // Si le patient est présent dans la BDD, on recupère l'id et on l'associe directement à l'intervention
@@ -45,8 +48,11 @@ router.post('/add', (req,res) => {
                     arrival : req.body.arrival,
                     date : new Date()
                 })
-            newIntervention.save().then(() => {
-                res.json({result:true,message : 'Intervention added to database'})
+            newIntervention.save().then((interventionData) => {
+                Patient.updateOne({SSnumber:req.body.SSnumber},{$push:{interventions:interventionData._id}})
+                .then(() => {
+                    res.json({result:true,message : 'Intervention added to database and associated to patient document'})
+                })
             })  
         })
     }
