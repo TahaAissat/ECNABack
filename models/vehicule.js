@@ -5,6 +5,7 @@ const vehiculesSchema = mongoose.Schema({
     type : String,
     interventions : [{ type : mongoose.Schema.ObjectId, ref : 'interventions'}],
     etat : String,
+    SIREN : Number
 })
 
 const Vehicule = mongoose.model('vehicules' , vehiculesSchema)

@@ -1,11 +1,13 @@
 const mongoose = require('mongoose')
 
 const patientsSchema = mongoose.Schema ({
-    name : String,
+    lastName : String,
+    firstName:String,
     adress : String,
-    telephone : Number,
+    phone : Number,
     SSnumber : Number,
     mutuelle : String,
+    valide : Boolean,
     interventions : {type : mongoose.Schema.ObjectId, ref:'interventions'}
 })
 

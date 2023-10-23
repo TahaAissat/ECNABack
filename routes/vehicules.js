@@ -18,6 +18,7 @@ router.post('/addVehicule' , (req,res) => {
                 plaque : req.body.plaque,
                 type : req.body.type,
                 etat : 'en ligne',
+                SIREN : req.body.SIREN,
                 interventions : []
             })
         newVehicule.save().then((data) => {
@@ -30,6 +31,23 @@ router.post('/addVehicule' , (req,res) => {
         } else {
             res.json({result:false,error:'Un véhicule avec cette plaque a deja été enregistré'})
         }
+    })
+})
+
+// Route pour renvoyer la liste de tous les véhicules associés au SIREN présent dans le reducer
+router.get('/:SIREN', (req,res) => {
+    Vehicule.find({SIREN:req.params.SIREN})
+    .then(data => {
+        res.json({result:true,vehicules:data})
+    })
+})
+
+// Route pour récuperer les interventions associées à un véhicule
+router.get('/:plaque', (req,res) => {
+    Vehicule.findOne({plaque:req.params.plaque})
+    .populate('interventions')
+    .then(data => {
+        res.json({result:true,interventions:data.interventions})
     })
 })
 

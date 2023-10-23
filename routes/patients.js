@@ -1,5 +1,22 @@
 var express = require('express');
 var router = express.Router();
+const Patient = require('../models/patient')
+const {checkBody} = require('../modules/checkBody')
+
+router.post('/verify', (req,res) => {
+    if(!checkBody(req.body,['numeroSS'])){
+        res.json({result:false,error:'Champ vide ou manquant'})
+        return
+    }
+    Patient.findOne({numeroSS:req.body.numeroSS})
+    .then(data => {
+        if(data){
+            res.json({result:true,patient:data})
+        } else {
+            res.json({result:false,error:'Aucun patient avec ce numero de SS trouvé'})
+        }
+    })
+})
 
 
 
