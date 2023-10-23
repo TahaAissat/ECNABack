@@ -7,7 +7,7 @@ const patientsSchema = mongoose.Schema ({
     phone : String,
     SSnumber : String,
     mutuelle : String,
-    valide : Boolean,
+    valide : String,
     interventions : {type : mongoose.Schema.ObjectId, ref:'interventions'}
 })
 
