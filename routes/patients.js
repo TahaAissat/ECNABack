@@ -22,7 +22,7 @@ router.post('/verify', (req,res) => {
 // Route pour récuperer l'ensemble des patients
 router.get('/all', (req,res) => {
     Patient.find().then(patientData => {
-        res.json({result:true,patientData})
+        res.json({result:true,data:patientData})
     })
 })
 
