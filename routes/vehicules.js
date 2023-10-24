@@ -19,7 +19,7 @@ router.post('/add' , (req,res) => {
             const newVehicule = new Vehicule({
                 plaque : req.body.plaque,
                 type : req.body.type,
-                etat : 'en ligne',
+                etat : 'En ligne',
                 SIREN : req.body.SIREN,
                 interventions : []
             })
@@ -45,13 +45,14 @@ router.get('/:SIREN', (req,res) => {
 })
 
 // Route pour récuperer les interventions associées à un véhicule
-router.get('/:plaque', (req,res) => {
+router.get('/interventions/:plaque', (req,res) => {
     Vehicule.findOne({plaque:req.params.plaque})
     .populate('interventions')
     .then(data => {
         res.json({result:true,interventions:data.interventions})
     })
 })
+
 
 
 module.exports = router;

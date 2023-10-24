@@ -29,7 +29,8 @@ router.post('/add', (req,res) => {
                 patient : patientData._id,
                 departure : req.body.departure,
                 arrival : req.body.arrival,
-                date : new Date()
+                date : new Date(),
+                vehicule : null
             })
         newIntervention.save().then((interventionData) => {
             Patient.updateOne({SSnumber:req.body.SSnumber},{$push:{interventions:interventionData._id}})
@@ -46,7 +47,8 @@ router.post('/add', (req,res) => {
                     patient : patientData._id,
                     departure : req.body.departure,
                     arrival : req.body.arrival,
-                    date : new Date()
+                    date : new Date(),
+                    vehicule : null
                 })
             newIntervention.save().then((interventionData) => {
                 Patient.updateOne({SSnumber:req.body.SSnumber},{$push:{interventions:interventionData._id}})
