@@ -58,6 +58,14 @@ router.post('/add', (req,res) => {
     }
 })
 
+router.get('/find', (req,res)=>{
+    Intervention.find()
+    .populate('patient')
+    .populate('vehicule')
+    .then(findInterventions=>{
+        res.json({Intervention: findInterventions})
+    })
+})
 
 
 
