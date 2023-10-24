@@ -8,7 +8,7 @@ const patientsSchema = mongoose.Schema ({
     SSnumber : String,
     mutuelle : String,
     valide : String,
-    interventions : [{type : mongoose.Schema.ObjectId, ref:'interventions'}]
+    interventions : {type : mongoose.Schema.ObjectId, ref:'interventions'}
 })
 
 const Patient = mongoose.model('patients',patientsSchema)
