@@ -26,6 +26,19 @@ router.get('/all', (req,res) => {
     })
 })
 
+router.get('/:patient', (req,res)=>{
+    Patient.find({lastName: req.params.patient})
+    .populate('interventions')
+    .then(patientInter =>{
+        if(patientInter){
+            res.json({result:true, data:patientInter})
+        }else {
+            res.json({result:false,error:'Patient non lié'})
+        }
+    })
+})
+
+
 
 
 
