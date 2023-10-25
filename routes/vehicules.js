@@ -48,7 +48,6 @@ router.get('/:SIREN', (req,res) => {
 router.get('/interventions/:plaque', (req,res) => {
     Vehicule.findOne({plaque:req.params.plaque})
     .populate('interventions')
-    .populate('patient')
     .then(data => {
         res.json({result:true,interventions:data.interventions})
     })

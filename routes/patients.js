@@ -26,6 +26,8 @@ router.get('/all', (req,res) => {
     })
 })
 
+// Route pour récuperer la liste des interventions selon le numero SS d'un patient
+
 
 
 
