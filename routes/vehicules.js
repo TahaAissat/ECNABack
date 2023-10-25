@@ -47,7 +47,13 @@ router.get('/:SIREN', (req,res) => {
 // Route pour récuperer les interventions associées à un véhicule
 router.get('/interventions/:plaque', (req,res) => {
     Vehicule.findOne({plaque:req.params.plaque})
-    .populate('interventions')
+    .populate({
+        path : 'interventions',
+        populate : {
+            path:'patient'
+        }
+    }
+        )
     .then(data => {
         res.json({result:true,interventions:data.interventions})
     })
