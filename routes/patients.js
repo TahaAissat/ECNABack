@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
 const Patient = require('../models/patient')
-const {checkBody} = require('../modules/checkBody')
+const {checkBody} = require('../modules/checkBody');
+const e = require('express');
 
 // Route pour vérifier la présence ou non d'un patient dans la DB lors de la création d'une fiche intervention
 router.post('/verify', (req,res) => {
@@ -26,7 +27,7 @@ router.get('/all', (req,res) => {
     })
 })
 
-// Route pour récuperer la liste des interventions selon le numero SS d'un patient
+// Route pour récuperer la liste des interventions selon le nom d'un patient
 router.get('/:patient', (req,res)=>{
     Patient.find({lastName: req.params.patient})
     .populate('interventions')
@@ -39,7 +40,14 @@ router.get('/:patient', (req,res)=>{
     })
 })
 
-
+// Route pour récuperer la liste des informations d'un patient en fonction de son numéro SS
+router.get('/unique/:SSnumber' , (req,res) => {
+    Patient.findOne({SSnumber:req.params.SSnumber})
+    .then(patientData => {
+        console.log(patientData)
+            res.json({result:true, data:patientData})
+    })
+})
 
 
 
