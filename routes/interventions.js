@@ -4,6 +4,7 @@ const Intervention = require('../models/intervention')
 const Vehicule = require('../models/vehicule')
 const Patient = require('../models/patient')
 const {checkBody} = require('../modules/checkBody')
+const uid2 = require('uid2')
 
 
 // Route de création d'une intervention
@@ -13,6 +14,7 @@ router.post('/add', (req,res) => {
         res.json({result:false,error:'Missing or empty fields'})
         return
     }
+let interToken = uid2(32)
 // Si l'Etat du front indique que le patient n'existe pas dans la BDD, créer un nouveau document avec les informations rentrées
     if(!req.body.existe){
         const newPatient = new Patient({
@@ -25,13 +27,14 @@ router.post('/add', (req,res) => {
             mutuelle : req.body.mutuelle,
             token : req.body.token
         })
-    newPatient.save().then(patientData => {
+    newPatient.save().then(patientData => {        
             const newIntervention = new Intervention({
                 patient : patientData._id,
                 departure : req.body.departure,
                 arrival : req.body.arrival,
                 date : new Date(),
                 vehicule : null,
+                interToken : interToken,
                 SIREN : req.body.SIREN
             })
         newIntervention.save().then((interventionData) => {
@@ -51,6 +54,7 @@ router.post('/add', (req,res) => {
                     arrival : req.body.arrival,
                     date : new Date(),
                     vehicule : null,
+                    interToken : interToken,
                     SIREN : req.body.SIREN
                 })
             newIntervention.save().then((interventionData) => {
@@ -63,19 +67,11 @@ router.post('/add', (req,res) => {
     }
 })
 
-router.get('/find', (req,res)=>{
-    Intervention.find()
-    .populate('patient')
-    .populate('vehicule')
-    .then(findInterventions=>{
-        res.json({Intervention: findInterventions})
-    })
-})
-
 // Route pour récuperer l'ensemble des interventions associées au SIREN connecté
 router.get('/:SIREN', (req,res) => {
     Intervention.find({SIREN:req.params.SIREN})
     .populate('patient')
+    .populate('vehicule')
     .then(interData => {
         if(interData.length>0){
             res.json({result:true,interventions:interData})
@@ -85,5 +81,23 @@ router.get('/:SIREN', (req,res) => {
     })
 })
 
+// Route pour dispatcher une intervention à un véhicule
+router.post('/dispatch' , (req,res) => {
+    Vehicule.findOne({plaque:req.body.plaque})
+    .then(vehiculeData => {
+        Intervention.findOneAndUpdate({interToken : req.body.interToken} , {vehicule : vehiculeData._id})
+        .then((interData) => {
+            Vehicule.updateOne({plaque:req.body.plaque} , {$push:{interventions:interData._id}})
+            .then(data=>{
+                if(data.modifiedCount > 0){
+                    res.json({result:true,message:'Intervention dispatchée au vehicule'})
+                }
+            })
+        })
+    })
+})
+
+// Intervention.deleteMany({})
+// .then(() => console.log('done'))
 
 module.exports = router;

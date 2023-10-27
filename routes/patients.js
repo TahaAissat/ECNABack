@@ -22,7 +22,7 @@ router.post('/verify', (req,res) => {
 
 // Route pour récuperer la liste des interventions selon le nom d'un patient
 router.get('/:patient', (req,res)=>{
-    Patient.find({lastName: req.params.patient})
+    Patient.find({lastName: new RegExp(req.params.patient,'i')})
     .populate({
         path : 'interventions',
         populate : {
@@ -34,6 +34,8 @@ router.get('/:patient', (req,res)=>{
             res.json({result:true, data:patientInter})
     })
 })
+
+
 // Route pour récuperer l'ensemble des patients associés à un token (un utilisateur avec X entreprises)
 router.get('/all/:token' , (req,res) => {
     Patient.find({token:req.params.token})
@@ -45,6 +47,9 @@ router.get('/all/:token' , (req,res) => {
         }
     })
 })
+
+// Patient.deleteMany({})
+// .then(() => console.log('done'))
 
 
 module.exports = router;
