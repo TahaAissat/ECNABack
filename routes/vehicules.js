@@ -59,6 +59,12 @@ router.get('/interventions/:plaque', (req,res) => {
     })
 })
 
+router.post('/update/:plaque', (req,res)=>{
+    Vehicule.findOneAndUpdate({plaque:req.params.plaque, etat: req.body.etat})
+    .then(data=>{
+       res.json({result:true, Vehicule: data})
+    })
+})
 
 
 module.exports = router;
