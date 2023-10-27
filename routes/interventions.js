@@ -76,6 +76,7 @@ router.get('/find', (req,res)=>{
 router.get('/:SIREN', (req,res) => {
     Intervention.find({SIREN:req.params.SIREN})
     .populate('patient')
+    .populate('vehicule')
     .then(interData => {
         if(interData.length>0){
             res.json({result:true,interventions:interData})
