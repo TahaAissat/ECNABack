@@ -10,7 +10,7 @@ const bcrypt = require('bcrypt')
 // Route SignUp (testé)
 router.post('/signup', (req,res) => {
 // Verification des champs renvoyés du front avec le module checkBody
-    if(!checkBody(req.body,['username' , 'password','email'])){
+    if(!checkBody(req.body,['username' , 'password','email', 'name' , 'SIREN'])){
         res.json({result:false , error: 'Missing or empty fields'})
         return
     }
@@ -30,15 +30,33 @@ User.findOne({name:req.body.username})
             entreprises : []
         })
     newUser.save().then(() => {
-// Si le nom n'est pas présent dans la BDD, on save + renvoie token vers le front        
-        res.json({result : true , token})
-    })
+Entreprise.findOne({SIREN:req.body.SIREN})
+.then(data => {
+    if(data === null){
+        const newEntreprise = new Entreprise({
+            name : req.body.name,
+            SIREN : req.body.SIREN,
+            vehicules : []
+        })
+    newEntreprise.save()
+    .then((data) => {
+// On met à jour le document user dont le token correspond au token renvoyé du front(présent dans le reducer)   
+      User.updateOne({token:token},{$push:{entreprises:data._id}})
+        .then(() => {
+            res.json({result:true,token:token,SIREN : req.body.SIREN,message : 'Entreprise created & added to user document'})
+                })
+            })
     } else {
-// Si nom présent, renvoyer un message d'erreur 
-        res.json({result:false , error : 'This name has been taken'})
+        req.json({result:false})
     }
 })
 })
+} else {
+    res.json({result:false})
+}
+})
+})
+
 
 // Route signIn (testé)
 router.post('/signin', (req,res) => {
@@ -52,7 +70,7 @@ User.findOne({username : req.body.username})
 .then(data => {
 // Si le nom ainsi que le mot de passe correspondent, on renvoit true et le token
     if(data && bcrypt.compareSync(req.body.password,data.password)) {
-        res.json({result:true , token : data.token, SIREN : data.entreprises[0].SIREN})
+        res.json({result:true , token : data.token , SIREN : data.entreprises[0].SIREN})
     } else {
 // Si non, renvoyer false et message d'erreur
         res.json({result:false,error:'Mauvais identifiant ou mot de passe'})
@@ -60,33 +78,33 @@ User.findOne({username : req.body.username})
 })
 })
 
-// Création du document entreprise lorsqu'un user sign up (testé)
-router.post('/addEntreprise', (req,res) => {
-// Verification des champs
-    if(!checkBody(req.body,['name','SIREN'])){
-        res.json({result:false, error : 'Empty or missing fields'})
-    }
-// Recherche dans la collection entreprises d'un document avec le SIREN envoyé du front
-Entreprise.findOne({SIREN:req.body.SIREN})
-.then(data => {
-    if(data === null){
-        const newEntreprise = new Entreprise({
-            name : req.body.name,
-            SIREN : req.body.SIREN,
-            vehicules : []
-        })
-    newEntreprise.save().then((data) => {
-// On met à jour le document user dont le token correspond au token renvoyé du front(présent dans le reducer)   
-        User.updateOne({token:req.body.token},{$push:{entreprises:data._id}})
-        .then(() => {
-            res.json({result:true, SIREN : req.body.SIREN, message : 'Entreprise created & added to user document'})
-        })
-    })
-    } else {
-        res.json({result:false, error:'Une entreprise avec ce SIREN existe dejà'})
-    }
-})    
-})
+// // Création du document entreprise lorsqu'un user sign up (testé)
+// router.post('/addEntreprise', (req,res) => {
+// // Verification des champs
+//     if(!checkBody(req.body,['name','SIREN'])){
+//         res.json({result:false, error : 'Empty or missing fields'})
+//     }
+// // Recherche dans la collection entreprises d'un document avec le SIREN envoyé du front
+// Entreprise.findOne({SIREN:req.body.SIREN})
+// .then(data => {
+//     if(data === null){
+//         const newEntreprise = new Entreprise({
+//             name : req.body.name,
+//             SIREN : req.body.SIREN,
+//             vehicules : []
+//         })
+//     newEntreprise.save().then((data) => {
+// // On met à jour le document user dont le token correspond au token renvoyé du front(présent dans le reducer)   
+//         User.updateOne({token:req.body.token},{$push:{entreprises:data._id}})
+//         .then(() => {
+//             res.json({result:true, SIREN : req.body.SIREN, message : 'Entreprise created & added to user document'})
+//         })
+//     })
+//     } else {
+//         res.json({result:false, error:'Une entreprise avec ce SIREN existe dejà'})
+//     }
+// })    
+// })
 
 module.exports = router;
  

@@ -22,7 +22,8 @@ router.post('/add', (req,res) => {
             SSnumber: req.body.SSnumber,
             phone : req.body.phone,
             valide : req.body.valide,
-            mutuelle : req.body.mutuelle
+            mutuelle : req.body.mutuelle,
+            token : req.body.token
         })
     newPatient.save().then(patientData => {
             const newIntervention = new Intervention({
@@ -30,7 +31,8 @@ router.post('/add', (req,res) => {
                 departure : req.body.departure,
                 arrival : req.body.arrival,
                 date : new Date(),
-                vehicule : null
+                vehicule : null,
+                SIREN : req.body.SIREN
             })
         newIntervention.save().then((interventionData) => {
             Patient.updateOne({SSnumber:req.body.SSnumber},{$push:{interventions:interventionData._id}})
@@ -48,7 +50,8 @@ router.post('/add', (req,res) => {
                     departure : req.body.departure,
                     arrival : req.body.arrival,
                     date : new Date(),
-                    vehicule : null
+                    vehicule : null,
+                    SIREN : req.body.SIREN
                 })
             newIntervention.save().then((interventionData) => {
                 Patient.updateOne({SSnumber:req.body.SSnumber},{$push:{interventions:interventionData._id}})
@@ -69,6 +72,18 @@ router.get('/find', (req,res)=>{
     })
 })
 
+// Route pour récuperer l'ensemble des interventions associées au SIREN connecté
+router.get('/:SIREN', (req,res) => {
+    Intervention.find({SIREN:req.params.SIREN})
+    .populate('patient')
+    .then(interData => {
+        if(interData.length>0){
+            res.json({result:true,interventions:interData})
+        } else {
+            res.json({result:false,interventions:interData})
+        }
+    })
+})
 
 
 module.exports = router;

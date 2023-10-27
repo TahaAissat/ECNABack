@@ -6,7 +6,8 @@ const interventionsSchema = mongoose.Schema({
     departure : String,
     arrival : String,
     date : Date,
-    anomalie : {type : mongoose.Schema.ObjectId, ref:'anomalies'}
+    anomalie : {type : mongoose.Schema.ObjectId, ref:'anomalies'},
+    SIREN : String,
 })
 
 const Intervention = mongoose.model('interventions', interventionsSchema)
