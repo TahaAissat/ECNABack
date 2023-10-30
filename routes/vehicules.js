@@ -40,7 +40,11 @@ router.post('/add' , (req,res) => {
 router.get('/:SIREN', (req,res) => {
     Vehicule.find({SIREN:req.params.SIREN})
     .then(data => {
-        res.json({result:true,vehicules:data})
+        if(data.length > 0) {
+            res.json({result:true,vehicules:data})
+        } else {
+            res.json({result:false,error:'Aucun véhicule associé à cette entreprise'})
+        }   
     })
 })
 
@@ -55,16 +59,21 @@ router.get('/interventions/:plaque', (req,res) => {
     }
         )
     .then(data => {
-        res.json({result:true,interventions:data.interventions})
+        if(data){
+            res.json({result:true,interventions:data.interventions})
+        }
     })
 })
 
 router.post('/update/:plaque', (req,res)=>{
-    Vehicule.findOneAndUpdate({plaque:req.params.plaque, etat: req.body.etat})
+    Vehicule.updateOne({plaque:req.params.plaque} , {etat : req.body.etat})
     .then(data=>{
-       res.json({result:true, Vehicule: data})
+       res.json({result:true})
     })
 })
+
+// Vehicule.deleteMany({})
+// .then(data => console.log('done'))
 
 
 module.exports = router;
