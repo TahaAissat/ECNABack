@@ -106,6 +106,8 @@ User.findOne({username : req.body.username})
 // })    
 // })
 
+// User.deleteMany({})
+// .then(() => console.log('done'))
 
 
 module.exports = router;
