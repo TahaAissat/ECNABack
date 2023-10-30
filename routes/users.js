@@ -47,7 +47,7 @@ Entreprise.findOne({SIREN:req.body.SIREN})
                 })
             })
     } else {
-        req.json({result:false})
+        res.json({result:false})
     }
 })
 })

@@ -46,7 +46,7 @@ let interToken = uid2(32)
     })
 // Si le patient est présent dans la BDD, on recupère l'id et on l'associe directement à l'intervention
     }else {
-        Patient.findOne({SSnumber:req.body.SSnumber})
+        Patient.findOne({SSnumber:req.body.SSnumber , token : req.body.token})
         .then(patientData => {
                 const newIntervention = new Intervention({
                     patient : patientData._id,
