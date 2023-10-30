@@ -47,7 +47,7 @@ Entreprise.findOne({SIREN:req.body.SIREN})
                 })
             })
     } else {
-        req.json({result:false})
+        res.json({result:false})
     }
 })
 })
@@ -105,6 +105,10 @@ User.findOne({username : req.body.username})
 //     }
 // })    
 // })
+
+// User.deleteMany({})
+// .then(() => console.log('done'))
+
 
 module.exports = router;
  

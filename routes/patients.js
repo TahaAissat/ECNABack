@@ -10,7 +10,7 @@ router.post('/verify', (req,res) => {
         res.json({result:false,error:'Champ vide ou manquant'})
         return
     }
-    Patient.findOne({SSnumber:req.body.SSnumber})
+    Patient.findOne({SSnumber:req.body.SSnumber , token : req.body.token})
     .then(data => {
         if(data){
             res.json({result:true,patient:data})
