@@ -80,6 +80,7 @@ router.delete('/delete/:plaque', (req,res)=>{
     Vehicule.findOneAndDelete({plaque:req.params.plaque})
     .then(vehiculeData=>{
         Intervention.updateMany({vehicule: vehiculeData._id}, {vehicule: null})
+        Intervention.updateMany({vehicule: vehiculeData._id}, {etat:'prévue'})
         .then(interVehicule=>{
             res.json({result: true, interVehicule})
         })
