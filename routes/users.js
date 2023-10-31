@@ -47,12 +47,12 @@ Entreprise.findOne({SIREN:req.body.SIREN})
                 })
             })
     } else {
-        res.json({result:false})
+        res.json({result:false,error:'Une entreprise avec ce SIREN existe déjà'})
     }
 })
 })
 } else {
-    res.json({result:false})
+    res.json({result:false,error:'Un utilisateur avec ce nom existe déjà'})
 }
 })
 })
