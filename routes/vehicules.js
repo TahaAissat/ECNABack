@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const Vehicule = require('../models/vehicule');
 const Entreprise = require('../models/entreprise')
+const Intervention = require('../models/intervention')
 const {checkBody} = require('../modules/checkBody')
 
 
@@ -75,5 +76,13 @@ router.post('/update/:plaque', (req,res)=>{
 // Vehicule.deleteMany({})
 // .then(data => console.log('done'))
 
-
+router.delete('/delete/:plaque', (req,res)=>{
+    Vehicule.findOneAndDelete({plaque:req.params.plaque})
+    .then(vehiculeData=>{
+        Intervention.updateMany({vehicule: vehiculeData._id}, {vehicule: null})
+        .then(interVehicule=>{
+            res.json({result: true, interVehicule})
+        })
+    })
+})
 module.exports = router;
