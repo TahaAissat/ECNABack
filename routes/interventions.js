@@ -35,7 +35,8 @@ let interToken = uid2(32)
                 date : new Date(),
                 vehicule : null,
                 interToken : interToken,
-                SIREN : req.body.SIREN
+                SIREN : req.body.SIREN,
+                etat : "prévue"
             })
         newIntervention.save().then((interventionData) => {
             Patient.updateOne({SSnumber:req.body.SSnumber},{$push:{interventions:interventionData._id}})
@@ -55,7 +56,8 @@ let interToken = uid2(32)
                     date : new Date(),
                     vehicule : null,
                     interToken : interToken,
-                    SIREN : req.body.SIREN
+                    SIREN : req.body.SIREN,
+                    etat : 'prévue'
                 })
             newIntervention.save().then((interventionData) => {
                 Patient.updateOne({SSnumber:req.body.SSnumber},{$push:{interventions:interventionData._id}})
@@ -96,6 +98,31 @@ router.post('/dispatch' , (req,res) => {
         })
     })
 })
+
+// Route pour passer l'etat d'une intervention à 'en cours'
+router.post('/start' , (req,res) => {
+    Intervention.findOneAndUpdate({interToken:req.body.interToken} , {etat : 'en cours'})
+    .populate('vehicule')
+    .then(data => {
+        Vehicule.findOneAndUpdate({plaque:data.vehicule.plaque} , {etat:'En cours d\'intervention'})
+        .then(() => {
+            res.json({result:true,data})
+        })
+    })
+})
+
+// Route pour passer l'etat d'une intervention d'en cours à finie
+router.post('/end' , (req,res) => {
+    Intervention.findOneAndUpdate({interToken:req.body.interToken} , {etat:'finie'})
+    .populate('vehicule')
+    .then(data => {
+        Vehicule.findOneAndUpdate({plaque : data.vehicule.plaque} , {etat:'En ligne'})
+        .then(() => {
+            res.json({result:true,data})
+        })
+    })
+})
+
 
 // Intervention.deleteMany({})
 // .then(() => console.log('done'))

@@ -9,6 +9,7 @@ const interventionsSchema = mongoose.Schema({
     anomalie : {type : mongoose.Schema.ObjectId, ref:'anomalies'},
     SIREN : String,
     interToken : String,
+    etat : String
 })
 
 const Intervention = mongoose.model('interventions', interventionsSchema)

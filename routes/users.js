@@ -10,8 +10,8 @@ const bcrypt = require('bcrypt')
 // Route SignUp (testé)
 router.post('/signup', (req,res) => {
 // Verification des champs renvoyés du front avec le module checkBody
-    if(!checkBody(req.body,['username' , 'password','email', 'name' , 'SIREN'])){
-        res.json({result:false , error: 'Missing or empty fields'})
+    if(!checkBody(req.body,['username','password','email', 'name' , 'SIREN'])){
+        res.json({result:false , error: 'Champs vides ou manquants'})
         return
     }
 // Cryptage mdp 
@@ -19,7 +19,7 @@ let hash = bcrypt.hashSync(req.body.password,10)
 // Generation token
 let token = uid2(32)
 // Check si user existe déja dans la BDD
-User.findOne({name:req.body.username})
+User.findOne({username:req.body.username})
 .then(data => {
     if(data === null){
         const newUser = new User({
