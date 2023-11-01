@@ -73,14 +73,17 @@ router.post('/update/:plaque', (req,res)=>{
     })
 })
 
-// Vehicule.deleteMany({})
-// .then(data => console.log('done'))
+router.get('/deleteAll', (req, res) => {
+  Vehicule.deleteMany({})
+  .then(data => console.log('done'))
+})
+
 
 router.delete('/delete/:plaque', (req,res)=>{
     Vehicule.findOneAndDelete({plaque:req.params.plaque})
     .then(vehiculeData=>{
         Intervention.updateMany({vehicule: vehiculeData._id}, {vehicule: null})
-        Intervention.updateMany({vehicule: vehiculeData._id}, {etat:'prévue'})
+        Intervention.updateMany({vehicule: vehiculeData._id}, {etat:'finie'})
         .then(interVehicule=>{
             res.json({result: true, interVehicule})
         })

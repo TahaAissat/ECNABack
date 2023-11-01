@@ -124,7 +124,9 @@ router.post('/end' , (req,res) => {
 })
 
 
-// Intervention.deleteMany({})
-// .then(() => console.log('done'))
+router.get('/deleteAll', (req, res) => {
+    Intervention.deleteMany({}).then(() => console.log("done"));
+})
+
 
 module.exports = router;
