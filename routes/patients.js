@@ -48,7 +48,7 @@ router.get('/all/:token' , (req,res) => {
     })
 })
 
-router.get('/deleteAll', (req, res) => {
+router.get('/delete/deleteAll', (req, res) => {
     Patient.deleteMany({}).then(() => console.log("done"));
 })
 

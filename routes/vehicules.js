@@ -73,7 +73,7 @@ router.post('/update/:plaque', (req,res)=>{
     })
 })
 
-router.get('/deleteAll', (req, res) => {
+router.get('/delete/deleteAll', (req, res) => {
   Vehicule.deleteMany({})
   .then(data => console.log('done'))
 })
