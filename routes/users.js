@@ -19,7 +19,7 @@ router.post("/signup", (req, res) => {
   let hash = bcrypt.hashSync(req.body.password, 10);
   // Generation token
   let token = uid2(32);
-  // Check si user existe déja dans la BDD
+  // Check si user et le SIREN  existent dans la BDD
   User.findOne({ username: req.body.username }).then((userData) => {
     Entreprise.findOne({ SIREN: req.body.SIREN }).then((entrepriseData) => {
       if (userData === null && entrepriseData === null) {
@@ -88,7 +88,7 @@ router.post("/signin", (req, res) => {
     });
 });
 
-// // Création du document entreprise lorsqu'un user sign up (testé)
+// // Création du document entreprise lorsqu'un user sign up (testé mais non implementé dans le MVP)
 // router.post('/addEntreprise', (req,res) => {
 // // Verification des champs
 //     if(!checkBody(req.body,['name','SIREN'])){
